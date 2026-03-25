@@ -1,0 +1,58 @@
+---
+config:
+  look: handDrawn
+---
+flowchart TD
+    %% Primo ramo: Classificazione e Caption Generation
+    A["Frontal Image"] --> C["ResNet50 Encoder"]
+    B["Lateral Image"] --> D["ResNet50 Encoder"]
+    C --> E["Concatenated Features (4096)"]
+    D --> E
+    E --> E1["Classification & Caption Generation Branch"]
+    E1 --> G["Classifier (Binary/Ternary/Multiclass)"] & K["Linear Projection (4096→768)"]
+    G --> H["Classification Logits"]
+    K --> L["GPT-2 Decoder"]
+    L --> M["Generated Caption"]
+    
+    %% Secondo ramo: VAE Reconstruction separato
+    A2["Frontal Image"] --> C2["ResNet50 Encoder"]
+    B2["Lateral Image"] --> D2["ResNet50 Encoder"]
+    C2 --> E2["Concatenated Features (4096)"]
+    D2 --> E2
+    E2 --> O["VAE Reconstruction Branch"]
+    O --> P["VAE Encoder(FC for μ & logvar)"]
+    P --> Q["VAE Latent Space"]
+    Q --> R["Reparameterization"]
+    R --> S["VAE Decoder(ConvTranspose Layers)"]
+    S --> T["Reconstructed Image"]
+
+    %% Stile delle classi
+     A:::Peach
+     C:::Peach
+     B:::Peach
+     D:::Peach
+     E:::Aqua
+     E1:::#9c738f
+     O:::Sky
+     G:::Rose
+     K:::Sky
+     H:::Rose
+     L:::Sky
+     M:::Sky
+     A2:::Peach
+     C2:::Peach
+     B2:::Peach
+     D2:::Peach
+     E2:::Aqua
+    classDef Peach stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
+    classDef Aqua stroke-width:1px, stroke-dasharray:none, stroke:#46EDC8, fill:#DEFFF8, color:#378E7A
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    classDef Sky stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
+    classDef #9c738f fill:#9c738f
+    style E1 fill:#FFCDD2,stroke:#D50000
+    style O stroke:#AA00FF,fill:#E1BEE7
+    style P fill:#E1BEE7,stroke:#AA00FF
+    style Q fill:#E1BEE7,stroke:#AA00FF
+    style R fill:#E1BEE7,stroke:#AA00FF
+    style S fill:#E1BEE7,stroke:#AA00FF
+    style T fill:#E1BEE7,stroke:#AA00FF

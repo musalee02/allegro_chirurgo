@@ -1,0 +1,32 @@
+---
+config:
+  look: handDrawn
+---
+flowchart TD
+    A["Frontal Image"] --> C["ResNet50 Encoder"]
+    B["Lateral Image"] --> D["ResNet50 Encoder"]
+    C --> E["Concatenated Features (4096)"]
+    D --> E
+    E --> F["Classification Branch"] & J["Caption Generation Branch"]
+    F --> G["Classifier (Binary/Ternary/Multiclass)"]
+    G --> H["Classification Logits"]
+    J --> K["Linear Projection (4096→768)"]
+    K --> L["GPT-2 Decoder (with Cross-Attention)"]
+    L --> M["Generated Caption"]
+     
+     A:::Peach
+     C:::Peach
+     B:::Peach
+     D:::Peach
+     E:::Aqua
+     F:::Rose
+     J:::Sky
+     G:::Rose
+     H:::Rose
+     K:::Sky
+     L:::Sky
+     M:::Sky
+    classDef Peach stroke-width:1px, stroke-dasharray:none, stroke:#FBB35A, fill:#FFEFDB, color:#8F632D
+    classDef Aqua stroke-width:1px, stroke-dasharray:none, stroke:#46EDC8, fill:#DEFFF8, color:#378E7A
+    classDef Rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+    classDef Sky stroke-width:1px, stroke-dasharray:none, stroke:#374D7C, fill:#E2EBFF, color:#374D7C
